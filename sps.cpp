@@ -3,7 +3,7 @@
 //  they tap their fists in their open palms once, twice, and on the third time form one
 //  of three items: a rock (by keeping the hand in a fist), a sheet of paper (by holding
 //  the hand flat, palm down), or a pair of scissors (by extending the first two fingers
-//  and holding them apart in a ìVî).
+//  and holding them apart in a ‚ÄúV‚Äù).
 //
 // There are only three possible outcomes other than a tie:
 //  1) Rock cuts Scissors
@@ -35,7 +35,7 @@ enum Result {
 
 // Figure out what the selection is from the specified integer
 Selection GetSelectionForInteger(int inputInteger) {
-    // TODO: Implement
+   
     if(inputInteger == 1)
        {
            return ROCK;
@@ -55,11 +55,6 @@ Selection GetSelectionForInteger(int inputInteger) {
     }
 }
 
-// Returns a random number between min and max, inclusive of both
-int GetRandomNumber(int min, int max) {
-    // TODO: Implement
-    return min;
-}
 
 // Returns the selection for the AI according to a certain strategy
 Selection GetAISelection() {
@@ -89,7 +84,7 @@ Selection GetAISelection() {
 // and determines the result of the round. If the user beats
 // the AI it is considered a WIN, etc.
 Result GetResult(Selection userSelection, Selection aiSelection) {
-    // TODO: Implement
+    
     if (userSelection == aiSelection)
     {
         return DRAW;
@@ -137,7 +132,7 @@ void ShowInitalUI(int roundNum) {
 
 // Displays the appropriate string for each Selection
 void DisplaySelection(Selection a_nSelection) {
-    // TODO: Implement
+    
      if(a_nSelection == 1)
       {
          cout<<"ROCK\n";
@@ -189,8 +184,6 @@ int main(int argc, const char * argv[]) {
     string input;
     getline(cin, input);
 
-    // TODO: Use input apporpriately
-    // Hint: Look up the 'atoi' function to parse the string to int
     int playerInputInt = atoi( input.c_str() );
     playerSelection = GetSelectionForInteger(playerInputInt);
     // Show selected option
