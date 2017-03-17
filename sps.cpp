@@ -33,6 +33,11 @@ enum Result {
     ERROR
 };
 
+// Declaring two global variable
+
+int prevInput = 0; // To store previous input of user.
+int currInput;     // To store current input of user.
+
 // Figure out what the selection is from the specified integer
 Selection GetSelectionForInteger(int inputInteger) {
    
@@ -42,29 +47,64 @@ Selection GetSelectionForInteger(int inputInteger) {
        }
     else if(inputInteger == 2)
        {
-            return PAPER;
+           return PAPER;
        }
     else if(inputInteger == 3)
        {
            return SCISSORS;
        }
     else
-    {
-        if(inputInteger==0) //when user press Q for quit then atoi funciton will return 0.
-           exit(1);
-    }
+       {
+           return NONE;
+       }
+
 }
 
+// Returns a random number between min and max, inclusive of both
+int GetRandomNumber(int min, int max) {
+    
+    int seed = time(0); //gets system time
+    srand(seed); //seed the random number
+
+    min = 1 + rand() % max; //generate random number between 1 to 3.
+
+    return min;
+}
 
 // Returns the selection for the AI according to a certain strategy
 Selection GetAISelection() {
 
     int number;
-    int seed = time(0);//gets system time
-    srand(seed);//seed the random number
 
-    number = 1 + rand() % 3;//generate random number between 1 to 3.
+    // Using strategy to predict according to user input.
+    // If previous input of user is equal to current input then
+    // our AI will predict according to it.
 
+    if(prevInput == currInput)
+    {
+        if(currInput == 1)
+        {
+            return PAPER;
+        }
+        else if(currInput == 2)
+        {
+            return SCISSORS;
+        }
+        else
+        {
+            return ROCK;
+        }
+    }
+
+    // For next round we have to initialize previous input
+    // with current input obviously.
+    prevInput = currInput;
+
+    // If previous input is not equal to current input then
+    // our AI will use the GetRandomNumber function.
+
+    number = GetRandomNumber(1,3); // Calling GetRandomNumber function to get
+                                   // random number between 1 to 3.
     if(number == 1)
        {
           return ROCK;
@@ -84,37 +124,41 @@ Selection GetAISelection() {
 // and determines the result of the round. If the user beats
 // the AI it is considered a WIN, etc.
 Result GetResult(Selection userSelection, Selection aiSelection) {
-    
-    if (userSelection == aiSelection)
+   
+    if (userSelection == aiSelection) // When User and AI selects same option.
     {
         return DRAW;
     }
 
-    if ( userSelection == 1 && aiSelection == 2)
-    {
+    else if ( userSelection == 1 && aiSelection == 2) // When User selects Rock and
+    {                                            // AI selects Paper.
         return LOST;
     }
-    else if (userSelection == 1 && aiSelection == 3)
-    {
+    else if (userSelection == 1 && aiSelection == 3) // When User selects Rock and
+    {                                                // AI selects Scissors.
         return WON;
     }
 
-    if (userSelection == 2 && aiSelection == 1)
-    {
+    else if (userSelection == 2 && aiSelection == 1) // When User selects Paper and
+    {                                           // AI selects Rock.
         return WON;
     }
-    else if ( userSelection == 2 && aiSelection == 3)
-    {
+    else if ( userSelection == 2 && aiSelection == 3) // When User selects Paper and
+    {                                                 // AI selects Scissors.
         return LOST;
     }
 
-    if ( userSelection == 3 && aiSelection == 1)
-    {
+    else if ( userSelection == 3 && aiSelection == 1) // When User selects Scissors and
+    {                                            // AI selects Rock.
         return LOST;
     }
-    else if (userSelection == 3 && aiSelection == 2)
-    {
+    else if (userSelection == 3 && aiSelection == 2) // When User selects Scissors and
+    {                                                // AI selects Paper
         return WON;
+    }
+    else
+    {
+        return ERROR;
     }
 
 }
@@ -132,7 +176,7 @@ void ShowInitalUI(int roundNum) {
 
 // Displays the appropriate string for each Selection
 void DisplaySelection(Selection a_nSelection) {
-    
+   
      if(a_nSelection == 1)
       {
          cout<<"ROCK\n";
@@ -141,9 +185,13 @@ void DisplaySelection(Selection a_nSelection) {
       {
          cout<<"PAPER\n";
       }
-      else
+      else if(a_nSelection == 3)
       {
          cout<<"SCISSORS\n";
+      }
+      else
+      {
+          cout<<"NONE\n";
       }
 }
 
@@ -159,7 +207,7 @@ void DisplayResult(Result result) {
         cout<<"\n\n This round is a DRAW";
 
     } else {
-        cout<<"\n\n Oops! Something has gone wrong!";
+        cout<<"\n\nOops! Something has gone wrong!";
     }
 
 }
@@ -183,8 +231,14 @@ int main(int argc, const char * argv[]) {
     // Gets player input
     string input;
     getline(cin, input);
-
+    if(input == "Q" || input == "q")
+        exit(1);
+  
     int playerInputInt = atoi( input.c_str() );
+
+    // Saving current input of user.
+    currInput = playerInputInt;
+
     playerSelection = GetSelectionForInteger(playerInputInt);
     // Show selected option
     cout<<"\nYou have Selected: ";
